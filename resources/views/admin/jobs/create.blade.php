@@ -101,6 +101,7 @@
                                     <option value="draft" {{isset($jobs->status) && $jobs->status   == 'draft' ? 'selected' : '' }}> Draft</option>
                                     <option value="complete" {{isset($jobs->status) && $jobs->status   == 'complete' ? 'selected' : '' }}> Complete</option>
                                     <option value="cancel" {{isset($jobs->status) && $jobs->status   == 'cancel' ? 'selected' : '' }}> Cancel</option>
+                                    <option value="available" {{isset($jobs->status) && $jobs->status   == 'available' ? 'selected' : '' }}> Available</option>
                                 </select>
                             </div>
                         </div>

@@ -2,6 +2,17 @@
 @section('css')
 <link href="{{ URL::asset('assets/plugins/datatable/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
 <link href="{{ URL::asset('assets/plugins/select2/select2.min.css')}}" rel="stylesheet">
+<style type="text/css">
+    .stc-btn {
+    margin: 0px 5px 0px 5px;
+}
+.sub-btn {
+    margin: 0px 5px 0px 5px;
+    width: fit-content;
+    color: #fff !important;
+    background-color: #3c6ec7;
+}
+</style>
 @endsection
 @section('page-header')
     <!-- PAGE-HEADER -->
@@ -52,7 +63,7 @@
 
                         <div class="paging-section">
                                <form method="get" class="page-number">
-                                <h6 class="page-num">show</h6>
+                                <h6 class="page-num">Show</h6>
                                   <select id="pagination" name="paginate"class="form-control select2">
 
                                     <option value="10" {{ isset($_GET['paginate']) && ($_GET['paginate'] == 10) ? 'selected':''}}>10</option>
@@ -61,7 +72,7 @@
 
                                     <option value="30" {{ isset($_GET['paginate']) && ($_GET['paginate'] == 30) ? 'selected':''}}>30</option>
 
-                                    <option value="50" {{ isset($_GET['paginate']) && ($_GET['paginate'] == 40) ? 'selected':''}}>30</option>
+                                    <option value="40" {{ isset($_GET['paginate']) && ($_GET['paginate'] == 40) ? 'selected':''}}>40</option>
                                @if(isset($_GET['page']))<input type="hidden" name="page" value="{{$_GET['page']}}">@endif
 
                                <input type="submit" name="" style="display:none;">
@@ -73,11 +84,20 @@
 
                               <div class="search_bar d-flex">  
 
-                               <input type="" class="form-control" id="search" name="search" value="{{ (request()->get('search') != null) ? request()->get('search') : ''}}" placeholder="Search"></input>
+                                <select name="status" class="form-control stc-btn">
+                                    <option value="">Status</option>
+                                    <option value="publish" {{isset($jobs->status) && $jobs->status  == 'publish' ? 'selected' : '' }}> Publish</option>
+                                    <option value="draft" {{isset($jobs->status) && $jobs->status   == 'draft' ? 'selected' : '' }}> Draft</option>
+                                    <option value="complete" {{isset($jobs->status) && $jobs->status   == 'complete' ? 'selected' : '' }}> Complete</option>
+                                    <option value="cancel" {{isset($jobs->status) && $jobs->status   == 'cancel' ? 'selected' : '' }}> Cancel</option>
+                                    <option value="available" {{isset($jobs->status) && $jobs->status   == 'available' ? 'selected' : '' }}> Available</option>
+                                </select>
 
-                              <button type="submit" class="form-control src-btn" ><i class="angle fe fe-search"></i></button>
+                               <input type="" class="form-control" id="search" name="search" value="{{ (request()->get('search') != null) ? request()->get('search') : ''}}" placeholder="Search Title...  "></input>
 
-                               <a class="form-control src-btn" href="{{ route('dashboard.users.index') }}"><i class="angle fe fe-rotate-ccw"></i></a>
+                              <button type="submit" class="form-control sub-btn" >Submit</button>
+                              
+                               <a class="form-control src-btn" href="{{ route('dashboard.jobs.index') }}"><i class="angle fe fe-rotate-ccw"></i></a>
 
                           </div>
 

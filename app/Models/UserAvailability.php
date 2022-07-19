@@ -26,7 +26,7 @@ class UserAvailability extends Model
         'sat_close',
         'sun_open',
         'sun_close',
-        'not_available',
+        'is_available',
     ];
 
 }

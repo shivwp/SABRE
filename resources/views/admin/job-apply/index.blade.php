@@ -56,12 +56,12 @@ use \App\Http\Controllers\Controller;
             <div class="table-responsive">
                 <div class="paging-section">
                     <form method="get" class="page-number">
-                        <h6 class="page-num">show</h6>
+                        <h6 class="page-num">Show</h6>
                           <select id="pagination" name="paginate"class="form-control select2">
                             <option value="10" {{ isset($_GET['paginate']) && ($_GET['paginate'] == 10) ? 'selected':''}}>10</option>
                             <option value="20" {{ isset($_GET['paginate']) && ($_GET['paginate'] == 20) ? 'selected':''}}>20</option>
                             <option value="30" {{ isset($_GET['paginate']) && ($_GET['paginate'] == 30) ? 'selected':''}}>30</option>
-                            <option value="50" {{ isset($_GET['paginate']) && ($_GET['paginate'] == 40) ? 'selected':''}}>30</option>
+                            <option value="4s0" {{ isset($_GET['paginate']) && ($_GET['paginate'] == 40) ? 'selected':''}}>40</option>
                         </select>
                         @if(isset($_GET['page']))<input type="hidden" name="page" value="{{$_GET['page']}}">@endif
                        <input type="submit" name="" style="display:none;">
@@ -97,33 +97,33 @@ use \App\Http\Controllers\Controller;
                             <tr>
                                 <td>{{ $item->jobs_auto_id ?? '' }}</td>
                                 <td>{{ $item->title ?? '' }}</td>
-                                <td>{{ $item->first_name ?? '' }} {{ $item->last_name ?? '' }}</td>
+                                <td>{{ $item->name ?? '' }}</td>
                                 <td>{{  \Carbon\Carbon::parse($item->applied_date ?? '')->format('d-M-Y') }}</td>
                                 @php
                                 $usermeta = Controller::getUserMeta($item->user_id);
                                 @endphp
 
-                                @if($usermeta['bsis_guard_card_certificate'] != null)
+                                @if(isset($usermeta['bsis_guard_card_certificate']) && $usermeta['bsis_guard_card_certificate'] != null)
                                 <td class="icon_mid"><i class="fa fa-check-square-o"></i></td>
                                 @else
                                 <td class="time_icon"><i class="fa fa-times"></i></td>
                                 @endif
-                                @if($usermeta['bsis_exposed_certificate'] != null)
+                                @if(isset($usermeta['bsis_exposed_certificate']) && $usermeta['bsis_exposed_certificate'] != null)
                                 <td class="icon_mid"><i class="fa fa-check-square-o"></i></td>
                                 @else
                                 <td class="time_icon"><i class="fa fa-times"></i></td>
                                 @endif
-                                @if($usermeta['ca_ccw_certificate'] != null)
+                                @if(isset($usermeta['ca_ccw_certificate']) && $usermeta['ca_ccw_certificate'] != null)
                                 <td class="icon_mid"><i class="fa fa-check-square-o"></i></td>
                                 @else
                                 <td class="time_icon"><i class="fa fa-times"></i></td>
                                 @endif
-                                @if($usermeta['hr_certificate'] != null)
+                                @if(isset($usermeta['hr_certificate']) && $usermeta['hr_certificate'] != null)
                                 <td class="icon_mid"><i class="fa fa-check-square-o"></i></td>
                                 @else
                                 <td class="time_icon"><i class="fa fa-times"></i></td>
                                 @endif
-                                @if($usermeta['medical_training_certificate'] != null)
+                                @if(isset($usermeta['medical_training_certificate']) && $usermeta['medical_training_certificate'] != null)
                                 <td class="icon_mid"><i class="fa fa-check-square-o"></i></td>
                                 @else
                                 <td class="time_icon"><i class="fa fa-times"></i></td>

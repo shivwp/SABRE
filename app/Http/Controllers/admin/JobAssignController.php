@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\TaskLog;
 use App\Models\Jobs;
 use App\Models\User;
 use App\Models\Role;
@@ -14,7 +15,7 @@ use DB;
 
 class JobAssignController extends Controller
 {
-    public function index(){
+    public function index(Request $request){
         $d['title'] = "Applied Job ";
         $d['buton_name'] = "ADD NEW";
         $pagination=10;
@@ -52,21 +53,42 @@ class JobAssignController extends Controller
     {
         // dd($request);
         $d['jobs'] = Jobs::all();
-        $job_applied = JobApplied::updateOrCreate(['id'=>$request->id],[
+        $job_applied = JobApplied::updateOrCreate([
+            'job_id'            => $request->job_id,
+            'user_id'           => $request->user_id,
+        ],[
 
             'job_id'            => $request->job_id,
             'user_id'           => $request->user_id,
             'applied_date'      => Carbon::now()->toDateTimeString(),
             'status'            => 'pending',
         ]);
+        $task_log = TaskLog::updateOrCreate([
+            'job_id'            => $request->job_id,
+            'user_id'           => $request->user_id,
+        ],[
+
+            'job_id'            => $request->job_id,
+            'user_id'           => $request->user_id,
+            'arrive_on_site'    => 0,
+            'document_mileage'  => 0,
+            'call_local'        => 0,
+            'task_status'       => 0,
+        ]);
         if(!empty($request->status))
         {
            JobApplied::where('id','=',$request->id)->update([
             'status' => $request->status,
             ]);
+            $type='job approved ';
+
+            \Helper::addToLog('Job approved ', $type);
            return redirect()->route('dashboard.job-apply.index')->with('assign','Job Assigned successfully');
         }
-        
+
+        $type='job assigned ';
+
+            \Helper::addToLog('Job assigned to guard', $type);
         return redirect()->route('dashboard.job-apply.index');
     }
     public function edit($id)

@@ -30,7 +30,7 @@
 
                                 <ol class="breadcrumb">
 
-                                    <li class="breadcrumb-item"><a href="{{ route('dashboard.product.index') }}">Role</a></li>
+                                    <li class="breadcrumb-item"><a href="{{ route('dashboard.roles.index') }}">Role</a></li>
 
                                     @if(isset($role->id))
                                         <li class="breadcrumb-item active" aria-current="page">Edit</li>

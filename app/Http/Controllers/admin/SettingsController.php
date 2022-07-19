@@ -220,7 +220,8 @@ class SettingsController extends Controller
 
         }
 
-
+        $type='Setting';
+        \Helper::addToLog('Setting Updated', $type);
         return back();
 
     }

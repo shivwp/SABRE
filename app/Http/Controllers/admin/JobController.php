@@ -7,15 +7,18 @@ use Illuminate\Http\Request;
 use App\Models\Jobs;
 use App\Models\JobCategory;
 use App\Models\JobMeta;
+use App\Models\UserMeta;
 use App\Models\JobApplied;
+use App\Models\TaskLog;
 
 class JobController extends Controller
 {
-    public function index(){
+    public function index(Request $request){
         $d['title'] = "Job";
        
         // dd($d['model']);
         $d['buton_name'] = "ADD NEW";
+
         $pagination=10;
         if(isset($_GET['paginate'])){
             $pagination=$_GET['paginate'];
@@ -23,6 +26,9 @@ class JobController extends Controller
         $q=Jobs::select('*');
         if(!empty($request->search)){
             $q->where('title', 'like', "%$request->search%");  
+        }
+        if(!empty($request->status)){
+            $q->where('status', 'like', "%$request->status%");  
         }
         $d['jobs']=$q->paginate($pagination)->withQueryString();
         return view('admin.jobs.index',$d); 
@@ -71,6 +77,9 @@ class JobController extends Controller
                 'profile_image' => $filename
             ]);
         }
+        $type='Job ';
+        \Helper::addToLog('Job Updated', $type);
+        
         $jobs->update();
 
         return redirect()->route('dashboard.jobs.index');
@@ -92,6 +101,8 @@ class JobController extends Controller
     public function show($id)
     {
         $d['title'] = "All Assigned Guard List";
+        $d['task']=TaskLog::join('users','task_log.user_id','=','users.id')->join('jobs','task_log.job_id','jobs.id')->where('task_log.job_id','=',$id)->select('users.*','jobs.*','task_log.*','users.id as users_auto_id','jobs.id as job_auto_id')->get();
+        // dd($d['task']);
         $pagination=10;
         if(isset($_GET['paginate'])){
             $pagination=$_GET['paginate'];
@@ -104,7 +115,6 @@ class JobController extends Controller
         $d['job_cate'] = JobCategory::all();                                
         $d['asigne_job']=$ajob->paginate($pagination)->withQueryString();      
         $d['job_meta']   = $this->getJobMeta($id);
-        // dd($d['job_meta']);                   
         return view('admin.jobs.view', $d);
     }
     public function destroy($id)

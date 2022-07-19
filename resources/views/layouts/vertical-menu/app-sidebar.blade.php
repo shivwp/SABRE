@@ -1,8 +1,13 @@
-
 <style type="text/css">
     .app-sidebar {
     background: #325187!important;
     color: #ffffff;
+}
+.side-header {
+    display: flex;
+    border-bottom: 1px solid #eaedf1;
+    padding: 15px 10px;
+    transition: left .3s ease,width .3s ease;
 }
 .slide-item.active, .slide-item:focus, .slide-item:hover {
     text-decoration: none;
@@ -77,7 +82,8 @@ img.header-brand-img.light-logo1{
                     <div class="app-sidebar__user">
                         <div class="dropdown user-pro-body text-center">
                             <div class="user-pic">
-                                <img src="{{URL::asset('assets/images/users/10.jpg')}}" alt="user-img" class="avatar-xl rounded-circle">
+
+                                <img src="{{url('/')}}/{{ Auth::user()->profile_image}}" alt="user-img" class="avatar-xl rounded-circle">
                             </div>
                             <div class="user-info">
                                 <h6 class=" mb-0 text-dark">{{ Auth::user()->roles->first()->title}}</h6>
@@ -88,7 +94,7 @@ img.header-brand-img.light-logo1{
                     <div class="sidebar-navs">
                         <ul class="nav  nav-pills-circle">
                             <li class="nav-item" data-toggle="tooltip" data-placement="top" title="Settings">
-                                <a class="nav-link text-center m-2">
+                                <a class="nav-link text-center m-2" href="{{url('/dashboard/settings')}}">
                                     <i class="fe fe-settings"></i>
                                 </a>
                             </li>
@@ -117,7 +123,7 @@ img.header-brand-img.light-logo1{
                     </div>
                     <ul class="side-menu mt-3" >
                         <li class="slide">
-                            <a class="side-menu__item" data-toggle="slide" href="#"><i class="side-menu__icon ti-home"></i><span class="side-menu__label">Dashboard</span></a>
+                            <a class="side-menu__item" data-toggle="slide" href="{{url('/')}}"><i class="side-menu__icon ti-home"></i><span class="side-menu__label">Dashboard</span></a>
                             {{--<ul class="slide-menu">
                                 <li><a href="{{ url('/' . $page='home') }}" class="slide-item">Sales</a></li>
                                 <li class="sub-slide">
@@ -185,11 +191,14 @@ img.header-brand-img.light-logo1{
                                 <li><a href="{{ route('dashboard.user-availability.index') }}" class="slide-item">Availability List</a></li>
                             </ul>
                         </li> -->
+                        <li>
+                            <a class="side-menu__item" href="{{ route('dashboard.guard.index') }}"><i class="side-menu__icon fa fa-shield"></i><span class="side-menu__label">Guards</span></a>
+                        </li>
                         <li class="slide">
-                            <a class="side-menu__item" data-toggle="slide" href="#"> <i class="side-menu__icon fa fa-briefcase"></i><span class="side-menu__label">Job Management</span><i class="angle fa fa-angle-right"></i></a>
+                            <a class="side-menu__item" data-toggle="slide" href="#"> <i class="side-menu__icon fa fa-briefcase"></i><span class="side-menu__label">Task Management</span><i class="angle fa fa-angle-right"></i></a>
                             <ul class="slide-menu">
                                 <li><a href="{{ route('dashboard.jobs.index') }}" class="slide-item">Jobs</a></li>
-                                <li><a href="{{ route('dashboard.job-category.index') }}" class="slide-item">Job Category</a></li>
+                                <li><a href="{{ route('dashboard.job-category.index') }}" class="slide-item">Category</a></li>
                                 <li><a href="{{ route('dashboard.job-apply.index') }}" class="slide-item">Applied Jobs</a></li>
                             </ul>
                         </li>
@@ -218,7 +227,13 @@ img.header-brand-img.light-logo1{
                                 <li><a href="{{ route('dashboard.settings.index') }}" class="slide-item">Settings</a></li>
                             </ul>
                         </li>
-                        @can('support_access')
+                        <li>
+                            <a class="side-menu__item" href="{{ route('dashboard.task-log.index') }}"><i class="side-menu__icon fa fa-tasks"></i><span class="side-menu__label">Task Log</span></a>
+                        </li>
+                        <li>
+                            <a class="side-menu__item" href="{{ route('dashboard.logActivity') }}"><i class="side-menu__icon icon icon-clock"></i><span class="side-menu__label">Logs Activity</span></a>
+                        </li>
+                        {{--@can('support_access')
                         <li class="slide">
                             <a class="side-menu__item" data-toggle="slide" href="#"><i class="side-menu__icon fe fe-slack"></i><span class="side-menu__label">Support</span><i class="angle fa fa-angle-right"></i></a>
                             <ul class="slide-menu">
@@ -226,7 +241,7 @@ img.header-brand-img.light-logo1{
                                 <li><a href="{{ route('dashboard.support-category.index') }}" class="slide-item">Support Category</a></li>
                             </ul>
                         </li>
-                        @endcan 
+                        @endcan--}}
                         {{--<li>
                             <a class="side-menu__item" href="{{route("dashboard.cookie-cache-clear")}}"><i class="side-menu__icon ti-brush-alt"></i><span class="side-menu__label">Clear Cache</span></a>
                         </li>--}}

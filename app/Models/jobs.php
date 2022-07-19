@@ -36,4 +36,8 @@ class Jobs extends Model
     {
         return $this->belongsToMany('App\Models\User');
     }
+     public function tasklog()
+    {
+        return $this->belongsToMany('App\Models\TaskLog');
+    }
 }

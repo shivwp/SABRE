@@ -1,3 +1,8 @@
+<style type="text/css">
+	.avatar {
+    background: #325187 no-repeat 50%/cover !important;
+}
+</style>
 <!-- /Notification -->
 
 							<div class="d-flex  ml-auto header-right-icons header-search-icon">
@@ -217,7 +222,7 @@
 
 										<span>
 
-											<img src="{{URL::asset('assets/images/users/10.jpg')}}" alt="profile-user" class="avatar  profile-user brround cover-image">
+											<img src="{{url('/')}}/{{ Auth::user()->profile_image}}" alt="profile-user" class="avatar  profile-user brround cover-image">
 
 										</span>
 
@@ -239,19 +244,19 @@
 
 										<div class="dropdown-divider m-0"></div>
 
-										<a class="dropdown-item" href="#">
+										<a class="dropdown-item" href="{{url('/dashboard/users/1/edit')}}">
 
 											<i class="dropdown-icon mdi mdi-account-outline"></i> Profile
 
 										</a>
 
-										<a class="dropdown-item" href="#">
+										<a class="dropdown-item" href="{{url('/dashboard/settings')}}">
 
 											<i class="dropdown-icon  mdi mdi-settings"></i> Settings
 
 										</a>
 
-										<a class="dropdown-item" href="#">
+										{{--<a class="dropdown-item" href="#">
 
 											<span class="float-right"></span>
 
@@ -277,7 +282,7 @@
 
 											<i class="dropdown-icon mdi  mdi-logout-variant"></i> Sign out
 
-										</a>
+										</a>--}}
 
 									</div>
 

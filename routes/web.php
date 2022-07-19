@@ -48,6 +48,8 @@ use App\Http\Controllers\admin\MenuController;
 
 use App\Http\Controllers\admin\JobController;
 
+use App\Http\Controllers\admin\TaskLogController;
+
 use App\Http\Controllers\admin\JobCategoryController;
 
 use App\Http\Controllers\admin\JobAssignController;
@@ -55,6 +57,8 @@ use App\Http\Controllers\admin\JobAssignController;
 use App\Http\Controllers\admin\UserAvailabilityController;
 
 use App\Http\Controllers\admin\ModelsController;
+
+use App\Http\Controllers\admin\GuardController;
 
 use App\Http\Controllers\admin\ModelOrientationController;
 
@@ -177,9 +181,17 @@ Route::group(['prefix' => 'dashboard', 'as' => 'dashboard.', 'middleware' => ['a
 
     Route::resource('models', ModelsController::class);
 
+    //Guard
+
+    Route::resource('guard', GuardController::class);
+
     //Jobs
 
     Route::resource('jobs', JobController::class);
+
+    //task-log
+
+    Route::resource('task-log', TaskLogController::class);
 
     //JobCategory
 

@@ -52,7 +52,7 @@
 
                         <div class="paging-section">
                                <form method="get" class="page-number">
-                                <h6 class="page-num">show</h6>
+                                <h6 class="page-num">Show</h6>
                                   <select id="pagination" name="paginate"class="form-control select2">
 
                                     <option value="10" {{ isset($_GET['paginate']) && ($_GET['paginate'] == 10) ? 'selected':''}}>10</option>
@@ -61,7 +61,7 @@
 
                                     <option value="30" {{ isset($_GET['paginate']) && ($_GET['paginate'] == 30) ? 'selected':''}}>30</option>
 
-                                    <option value="50" {{ isset($_GET['paginate']) && ($_GET['paginate'] == 40) ? 'selected':''}}>30</option>
+                                    <option value="40" {{ isset($_GET['paginate']) && ($_GET['paginate'] == 40) ? 'selected':''}}>40</option>
                                @if(isset($_GET['page']))<input type="hidden" name="page" value="{{$_GET['page']}}">@endif
 
                                <input type="submit" name="" style="display:none;">
@@ -77,7 +77,7 @@
 
                               <button type="submit" class="form-control src-btn" ><i class="angle fe fe-search"></i></button>
 
-                               <a class="form-control src-btn" href="{{ route('dashboard.users.index') }}"><i class="angle fe fe-rotate-ccw"></i></a>
+                               <a class="form-control src-btn" href="{{ route('dashboard.job-category.index') }}"><i class="angle fe fe-rotate-ccw"></i></a>
 
                           </div>
 

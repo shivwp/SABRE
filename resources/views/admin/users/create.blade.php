@@ -34,6 +34,13 @@ div#m_dcontent {
     display: flex;
     align-items: center;
 }
+.alert.alert-success.alert-block {
+    margin: 20px 20px 0px 20px;
+}
+.avail{
+    font-size: 18px !important;
+    margin-left: 20px
+}
 </style>
 @endsection
 @section('page-header')
@@ -54,6 +61,12 @@ div#m_dcontent {
 @section('content')
 <!-- ROW-1 OPEN-->
 <div class="card">
+    @if ($message = Session::get('success'))
+    <div class="alert alert-success alert-block">
+        <button type="button" class="close" data-dismiss="alert">×</button> 
+            <strong>Your Profile has been updated successfully!</strong>
+    </div>
+    @endif
     <div class="alert alert-success" role="alert" id="successMsg" style="display: none;margin: 20px 20px 0px 20px;" >
       Money Added Successfully
     </div>
@@ -65,22 +78,31 @@ div#m_dcontent {
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label class="form-label">First Name</label>
-                        <input type="text" class="form-control" name="first_name" placeholder="First Name" value="{{ old('first_name', isset($user) ? $user->first_name : '') }}" required>
+                        <label class="form-label">Full Name</label>
+                        <input type="text" class="form-control" name="name" placeholder="First Name" value="{{ old('name', isset($user) ? $user->name : '') }}" required>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label class="form-label">Last Name</label>
-                        <input type="text" class="form-control" name="last_name" placeholder="Last Name" value="{{ old('last_name', isset($user) ? $user->last_name : '') }}" required>
-                    </div>
-                </div>
-                <div class="col-md-6">
+                 <div class="col-md-6">
                     <div class="form-group">
                         <label class="form-label">Email</label>
-                        <input type="email" class="form-control" name="email" placeholder="Last Name" value="{{ old('email', isset($user) ? $user->email : '') }}" required>
+                        <input type="email" class="form-control" name="email" placeholder="example@gmail.com" value="{{ old('email', isset($user) ? $user->email : '') }}" required>
                     </div>
                 </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="form-label">Profile Image</label>
+                        <input type="file" class="form-control" name="pro_image" value="">
+                        <input type="hidden" class="form-control" name="pro_image_old" value="{{isset($user) && !empty($user->profile_image) ? $user->profile_image : ''}}">
+                    </div>
+                </div>
+                @if(!empty($user->profile_image))
+                <div class="col-md-6">
+                    <div class="form-group" style="width: 150px;">
+                        <img src="{{url($user->profile_image)}}">
+                    </div>
+                </div>
+                @endif
+               
                 <div class="col-md-6">
                     <div class="form-group">
                         <label class="form-label">Password</label>
@@ -153,7 +175,91 @@ div#m_dcontent {
                 </div>
             </div>
             <hr>
-            <h3>ID Proof</h3>
+            <h3>On Bording Doc</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="form-label">Drug & Alcohol Policy</label>
+                        <input type="file" class="form-control" name="drug_alcohol">
+                        <input type="hidden" class="form-control" name="drug_alcohol_old" value="{{isset($user_meta) && !empty($user_meta['drug_alcohol']) ? $user_meta['drug_alcohol'] : ''}}">
+                    </div>
+                </div>
+               
+                <div class="col-md-6">
+                    <div class="form-group" style="width: 150px;">
+                         @if(!empty($user_meta['drug_alcohol']))
+                        <img src="{{url($user_meta['drug_alcohol'])}}">
+                        @endif
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="form-label">Employee Demographics</label>
+                        <input type="file" class="form-control" name="emp_demo">
+                        <input type="hidden" class="form-control" name="emp_demo_old" value="{{isset($user_meta) && !empty($user_meta['emp_demo']) ? $user_meta['emp_demo'] : ''}}"> 
+                    </div>
+                </div>
+               
+                <div class="col-md-6">
+                    <div class="form-group" style="width: 150px;">
+                         @if(!empty($user_meta['emp_demo']))
+                        <img src="{{url($user_meta['emp_demo'])}}">
+                         @endif
+                    </div>
+                </div>
+               
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="form-label">Rules for Use of Force (RUF)</label>
+                        <input type="file" class="form-control" name="rule_force">
+                        <input type="hidden" class="form-control" name="rule_force_old" value="{{isset($user_meta) && !empty($user_meta['rule_force']) ? $user_meta['rule_force'] : ''}}">
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-group" style="width: 150px;">
+                        @if(!empty($user_meta['rule_force']))
+                        <img src="{{url($user_meta['rule_force'])}}">
+                        @endif
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="form-label">SABREE 22 NDA</label>
+                        <input type="file" class="form-control" name="sabree_nda">
+                        <input type="hidden" class="form-control" name="sabree_nda_old" value="{{isset($user_meta) && !empty($user_meta['sabree_nda']) ? $user_meta['sabree_nda'] : ''}}">
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-group" style="width: 150px;">
+                        @if(!empty($user_meta['sabree_nda']))
+                        <img src="{{url($user_meta['sabree_nda'])}}">
+                        @endif
+                    </div>
+                </div>
+                
+                {{--<div class="col-md-6">
+                    <div class="form-group">
+                        <label class="form-label">Vaccination Card</label>
+                        <input type="file" class="form-control" name="vaccination_card">
+                        <input type="hidden" class="form-control" name="vaccination_card_old" value="{{isset($user_meta) && !empty($user_meta['vaccination_card']) ? $user_meta['vaccination_card'] : ''}}">
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-group" style="width: 150px;">
+                        @if(!empty($user_meta['vaccination_card']))
+                        <img src="{{url($user_meta['vaccination_card'])}}">
+                        @endif
+                    </div>
+                </div>--}}
+                
+            </div>
+            <hr>
+            <h3>Licenses</h3>
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
@@ -182,7 +288,7 @@ div#m_dcontent {
                 @if(!empty($user_meta['bsis_guard_card_certificate']))
                 <div class="col-md-6">
                     <div class="form-group" style="width: 150px;">
-                        <img src="{{url('certificate/'.$user_meta['bsis_guard_card_certificate'])}}">
+                        <img src="{{url($user_meta['bsis_guard_card_certificate'])}}">
                     </div>
                 </div>
                 @endif
@@ -215,7 +321,7 @@ div#m_dcontent {
                 @if(!empty($user_meta['bsis_exposed_certificate']))
                 <div class="col-md-6">
                     <div class="form-group" style="width: 150px;">
-                        <img src="{{url('certificate/'.$user_meta['bsis_exposed_certificate'])}}">
+                        <img src="{{url($user_meta['bsis_exposed_certificate'])}}">
                     </div>
                 </div>
                 @endif
@@ -248,7 +354,7 @@ div#m_dcontent {
                 @if(!empty($user_meta['ca_ccw_certificate']))
                 <div class="col-md-6">
                     <div class="form-group" style="width: 150px;">
-                        <img src="{{url('certificate/'.$user_meta['ca_ccw_certificate'])}}">
+                        <img src="{{url($user_meta['ca_ccw_certificate'])}}">
                     </div>
                 </div>
                 @endif
@@ -281,7 +387,7 @@ div#m_dcontent {
                 @if(!empty($user_meta['hr_certificate']))
                 <div class="col-md-6">
                     <div class="form-group" style="width: 150px;">
-                        <img src="{{url('certificate/'.$user_meta['hr_certificate'])}}">
+                        <img src="{{url($user_meta['hr_certificate'])}}">
                     </div>
                 </div>
                 @endif
@@ -297,36 +403,51 @@ div#m_dcontent {
                 </div>
             </div>
             <hr>
-            <h3>Bio About</h3> 
+            <h3>More Info</h3> 
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
                         <label class="form-label">What Experience do you have</label>
-                        <input type="checkbox" name="military" value="military" {{isset($user_meta['military']) && !empty($user_meta['military'] && $user_meta['military'] == 'military') ? "checked" : ''}}>
-                        <label for="vehicle1"> Military</label><br>
-                        <input type="checkbox" name="police" value="police" {{isset($user_meta['police']) && !empty($user_meta['police'] && $user_meta['police'] == 'police') ? 'checked' : ''}} > 
-                        <label for="vehicle2"> Police</label><br>
-                        <input type="checkbox" name="close_pro" value="close_pro" {{isset($user_meta['close_pro']) && !empty($user_meta['close_pro'] && $user_meta['close_pro'] == 'close_pro') ? 'checked' : ''}}>
-                        <label for="vehicle3"> Close Protection</label><br>
-                        <input type="checkbox" name="exe_pro" value="exe_pro" {{isset($user_meta['exe_pro']) && !empty($user_meta['exe_pro'] && $user_meta['exe_pro'] == 'exe_pro') ? 'checked' : ''}}>
-                        <label for="vehicle2"> Executive Protection</label><br>
-                        <input type="checkbox" name="advance_course" value="advance_course" {{isset($user_meta['advance_course']) && !empty($user_meta['advance_course'] && $user_meta['advance_course'] == 'advance_course') ? 'checked' : ''}}>
-                        <label for="vehicle2"> Advanced Driving Course</label><br>
+
+                        @php
+                        $exp = [
+                            'military'=>'Military',
+                            'police'=>'Police',
+                            'close_protection'=>'Close Protection',
+                            'executive_protection'=>'Executive Protection',
+                            'advance_course'=>'Advanced Driving Course'
+                        ];
+                        if(isset($experience_data)){
+                            $exp_data = explode(',',$experience_data);
+                        }
+                        @endphp
+                        
+                        @foreach($exp as $key => $val)
+                        <input type="checkbox" name="experience[]" value="{{$key}}" {{isset($exp_data) && in_array($key,$exp_data) ? 'checked' : ''}}>
+                        <label for="vehicle1"> {{$val}}</label><br>
+                        @endforeach
+                        
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <label class="form-label">Medical Training</label>
-                        <input type="checkbox" name="cpr" value="cpr" {{isset($user_meta['cpr']) && !empty($user_meta['cpr'] && $user_meta['cpr'] == 'cpr') ? 'checked' : ''}}>
-                        <label for="vehicle1" > CPR</label><br>
-                        <input type="checkbox" name="first_aid" value="first_aid" {{isset($user_meta['first_aid']) && !empty($user_meta['first_aid'] && $user_meta['first_aid'] == 'first_aid') ? 'checked' : ''}}>
-                        <label for="vehicle2"> First Aid</label><br>
-                        <input type="checkbox" name="trauma" value="trauma" {{isset($user_meta['trauma']) && !empty($user_meta['trauma'] && $user_meta['trauma'] == 'trauma') ? 'checked' : ''}}>
-                        <label for="vehicle3"> Trauma Protection</label><br>
-                        <input type="checkbox" name="advance_first" value="advance_first" {{isset($user_meta['advance_first']) && !empty($user_meta['advance_first'] && $user_meta['advance_first'] == 'advance_first') ? 'checked' : ''}}>
-                        <label for="vehicle2"> Advanced First Aid TCCC</label><br>
-                        <input type="checkbox" name="head_shot" value="head_shot" {{isset($user_meta['head_shot']) && !empty($user_meta['head_shot'] && $user_meta['head_shot'] == 'head_shot') ? 'checked' : ''}}>
-                        <label for="vehicle2"> Upload Head Shot</label><br>
+                        @php
+                        $medical = [
+                            'cpr'=>'CPR',
+                            'first_aid'=>'First Aid',
+                            'trauma'=>'Trauma Protection',
+                            'advance_first'=>'Advanced First Aid TCCC',
+                            'head_shot'=>'Upload Head Shot'
+                        ];
+                        if(isset($medical_data)){
+                            $med_data = explode(',',$medical_data);
+                        }
+                        @endphp
+                        @foreach($medical as $key => $value)
+                        <input type="checkbox" name="medical[]" value="{{$key}}" {{isset($med_data) && in_array($key,$med_data) ? 'checked' : ''}}>
+                        <label for="vehicle1">{{$value}}</label><br>
+                        @endforeach
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -351,10 +472,20 @@ div#m_dcontent {
                 @if(!empty($user_meta['medical_training_certificate']))
                 <div class="col-md-6">
                     <div class="form-group" style="width: 150px;">
-                        <img src="{{url('certificate/'.$user_meta['medical_training_certificate'])}}">
+                        <img src="{{url($user_meta['medical_training_certificate'])}}">
                     </div>
                 </div>
                 @endif
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="form-label">Are You Vaccinated ? </label>
+                        <select name="vaccinated" class="form-control" required>
+                            <option value="">Select</option>
+                            <option value="yes" {{isset($user_meta['vaccinated']) && $user_meta['vaccinated'] == "yes" ? 'selected' : ''}}>Yes</option>
+                            <option value="no" {{isset($user_meta['vaccinated']) && $user_meta['vaccinated']  == "no" ? 'selected' : ''}}>No</option>
+                        </select>
+                    </div>
+                </div>
                 <div class="col-md-12">
                     <div class="form-group">
                         <label class="form-label">Short Bio of You</label>
@@ -365,41 +496,16 @@ div#m_dcontent {
             <hr>
             <h3>User Availability</h3>
             <div class="date-select ">
-                <div class="row days content-wrap sunday-2 ">
-                    <div class="col-lg-2 col-sm-2 dayselection" id="m_dcontent">
-                        <div class="txt">
-                            <div class="form-check">
-                                <label class="form-check-label weekdy" for="sunday">
-                                Sunday
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-sm-4" id="m_dcontent2">
-                        <div class="form-group">
-                        <p>Opening Time</p> 
-                            <input type="time" class="disable_time form-control dayo" name="sun_open" value="{{isset($user_avail->sun_open) ? $user_avail->sun_open : null}}" id="open_time">
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-sm-4" id="m_dcontent3">
-                        <div class="form-group">
-                        <p>Closing Time</p>  
-                            <input type="time" class="disable_time form-control dayc" name="sun_close" value="{{isset($user_avail->sun_close) ? $user_avail->sun_close : null}}">
-                        </div>
-                    </div>
-                    <div class="col-lg-2 col-sm-2 fullselection" id="m_dcontent4">
-                        <div class="txt">
-                            <div class="form-check">
-                                @if(isset($user_avail) && $user_avail->sun_open == null && $user_avail->sun_close == null)
-                                <input class="form-check-input dayfull" name="not_available" type="checkbox"  id="sunday-2" checked>
-                                @else
-                                <input class="form-check-input dayfull" name="not_available" type="checkbox"  id="sunday-2">
-                                @endif
-                                <label class="form-check-label " for="sunday-2">
-                                Not Available
-                                </label>
-                            </div>
-                        </div>
+                <div class="txt">
+                    <div class="form-check">
+                        @if(isset($user_avail->is_available) && ($user_avail->is_available == 0))
+                        <input class="form-check-input dayfull" name="is_available" value="0" type="checkbox" id="is_available" style="width: 25px;height: 25px;cursor: pointer;">
+                        @else
+                        <input class="form-check-input dayfull" name="is_available"  value="1" type="checkbox" id="is_available" style="width: 25px;height: 25px;cursor: pointer;" checked>
+                        @endif
+                        <label class="form-check-label avail" for="">
+                        Is Available
+                        </label>
                     </div>
                 </div>
                 <div class="row days content-wrap monday-2 ">
@@ -422,20 +528,6 @@ div#m_dcontent {
                         <div class="form-group">
                             <p>Closing Time</p>  
                             <input type="time" class="disable_time form-control dayc" name="mon_close" value="{{isset($user_avail->mon_close) ? $user_avail->mon_close : null }}">
-                        </div>
-                    </div>
-                    <div class="col-lg-2 col-sm-2 fullselection" id="m_dcontent4">
-                        <div class="txt">
-                            <div class="form-check">
-                                @if(isset($user_avail) && $user_avail->mon_open == null && $user_avail->mon_close == null)
-                                <input class="form-check-input dayfull" name="not_available" type="checkbox" id="sunday-2" checked>
-                                @else
-                                <input class="form-check-input dayfull" name="not_available" type="checkbox" id="sunday-2">
-                                @endif
-                                <label class="form-check-label " for="sunday-2">
-                                Not Available
-                                </label>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -461,20 +553,6 @@ div#m_dcontent {
                             <input type="time" class="disable_time form-control dayc" name="tue_close" value="{{isset($user_avail->tue_close) ? $user_avail->tue_close : null }}">
                         </div>
                     </div>
-                    <div class="col-lg-2 col-sm-2 fullselection" id="m_dcontent4">
-                        <div class="txt">
-                            <div class="form-check">
-                                @if(isset($user_avail) && $user_avail->tue_open == null && $user_avail->tue_close == null)
-                                <input class="form-check-input dayfull" name="not_available" type="checkbox" id="sunday-2" checked>
-                                @else
-                                <input class="form-check-input dayfull" name="not_available" type="checkbox" id="sunday-2">
-                                @endif
-                                <label class="form-check-label " for="sunday-2">
-                                Not Available
-                                </label>
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 <div class="row days content-wrap monday-2 ">
                     <div class="col-lg-2 col-sm-2 dayselection" id="m_dcontent">
@@ -496,20 +574,6 @@ div#m_dcontent {
                         <div class="form-group">
                             <p>Closing Time</p>  
                             <input type="time" class="disable_time form-control dayc" name="wed_close" value="{{isset($user_avail->wed_close) ? $user_avail->wed_close : null }}">
-                        </div>
-                    </div>
-                    <div class="col-lg-2 col-sm-2 fullselection" id="m_dcontent4">
-                        <div class="txt">
-                            <div class="form-check">
-                                @if(isset($user_avail) && $user_avail->wed_open == null && $user_avail->wed_close == null)
-                                <input class="form-check-input dayfull" name="not_available" type="checkbox" id="sunday-2" checked>
-                                @else
-                                <input class="form-check-input dayfull" name="not_available" type="checkbox" id="sunday-2">
-                                @endif
-                                <label class="form-check-label " for="sunday-2">
-                                Not Available
-                                </label>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -535,20 +599,6 @@ div#m_dcontent {
                             <input type="time" class="disable_time form-control dayc" name="thu_close" value="{{isset($user_avail->thu_close) ? $user_avail->thu_close : null }}">
                         </div>
                     </div>
-                    <div class="col-lg-2 col-sm-2 fullselection" id="m_dcontent4">
-                        <div class="txt">
-                            <div class="form-check">
-                                @if(isset($user_avail) && $user_avail->thu_open == null && $user_avail->thu_close == null)
-                                <input class="form-check-input dayfull" name="not_available" type="checkbox" id="sunday-2" checked>
-                                @else
-                                <input class="form-check-input dayfull" name="not_available" type="checkbox" id="sunday-2">
-                                @endif
-                                <label class="form-check-label " for="sunday-2">
-                                Not Available
-                                </label>
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 <div class="row days content-wrap monday-2 ">
                     <div class="col-lg-2 col-sm-2 dayselection" id="m_dcontent">
@@ -570,20 +620,6 @@ div#m_dcontent {
                         <div class="form-group">
                             <p>Closing Time</p>  
                             <input type="time" class="disable_time form-control dayc" name="fri_close" value="{{isset($user_avail->fri_close) ? $user_avail->fri_close : null }}">
-                        </div>
-                    </div>
-                    <div class="col-lg-2 col-sm-2 fullselection" id="m_dcontent4">
-                        <div class="txt">
-                            <div class="form-check">
-                                @if(isset($user_avail) && $user_avail->fri_open == null && $user_avail->fri_close == null)
-                                <input class="form-check-input dayfull" name="not_available" type="checkbox" id="sunday-2" checked>
-                                @else
-                                <input class="form-check-input dayfull" name="not_available" type="checkbox" id="sunday-2" >
-                                @endif
-                                <label class="form-check-label " for="sunday-2">
-                                Not Available
-                                </label>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -609,18 +645,27 @@ div#m_dcontent {
                             <input type="time" class="disable_time form-control dayc" name="sat_close" value="{{isset($user_avail->sat_close) ? $user_avail->sat_close : null }}">
                         </div>
                     </div>
-                    <div class="col-lg-2 col-sm-2 fullselection" id="m_dcontent4">
+                </div>
+                <div class="row days content-wrap sunday-2 ">
+                    <div class="col-lg-2 col-sm-2 dayselection" id="m_dcontent">
                         <div class="txt">
                             <div class="form-check">
-                                @if(isset($user_avail) && $user_avail->sat_open == null && $user_avail->sat_close == null)
-                                <input class="form-check-input dayfull" name="not_available" type="checkbox" id="sunday-2" checked>
-                                @else
-                                <input class="form-check-input dayfull" name="not_available" type="checkbox" id="sunday-2">
-                                @endif
-                                <label class="form-check-label " for="sunday-2">
-                                Not Available
+                                <label class="form-check-label weekdy" for="sunday">
+                                Sunday
                                 </label>
                             </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-4" id="m_dcontent2">
+                        <div class="form-group">
+                        <p>Opening Time</p> 
+                            <input type="time" class="disable_time form-control dayo" name="sun_open" value="{{isset($user_avail->sun_open) ? $user_avail->sun_open : null}}" id="open_time">
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-4" id="m_dcontent3">
+                        <div class="form-group">
+                        <p>Closing Time</p>  
+                            <input type="time" class="disable_time form-control dayc" name="sun_close" value="{{isset($user_avail->sun_close) ? $user_avail->sun_close : null}}">
                         </div>
                     </div>
                 </div>
@@ -658,13 +703,15 @@ div#m_dcontent {
 </script>
 <script>
     $(document).ready(function(){
-        $('input[type="checkbox"]').click(function(){
+        $('#is_available').click(function(){
             if($(this).is(':checked')){
-                $(this).closest('.content-wrap').find('.disable_time').attr('disabled', 'disabled');
-                $(this).closest('.content-wrap').find('.disable_time').val("");
+                $('input[type="time"]').removeAttr('disabled');
+                $('#is_available').val(1);
             }
             else{
-                $(this).closest('.content-wrap').find('.disable_time').removeAttr('disabled');
+                $('input[type="time"]').attr('disabled', true);
+                $('input[type="time"]').val("");
+                $('#is_available').val(0);
             }
         });
     });

@@ -62,7 +62,7 @@
 
                                                    <form method="get" class="page-number"  >
 
-                                                    <h6 class="page-num">show</h6>
+                                                    <h6 class="page-num">Show</h6>
 
                                                       <select id="pagination" name="paginate"class="form-control select2">
 
@@ -72,14 +72,14 @@
 
                                                         <option value="30" {{ isset($_GET['paginate']) && ($_GET['paginate'] == 30) ? 'selected':''}}>30</option>
 
-                                                        <option value="50" {{ isset($_GET['paginate']) && ($_GET['paginate'] == 40) ? 'selected':''}}>30</option>
+                                                        <option value="50" {{ isset($_GET['paginate']) && ($_GET['paginate'] == 40) ? 'selected':''}}>40</option>
 
                                                    @if(isset($_GET['page']))<input type="hidden" name="page" value="{{$_GET['page']}}">@endif
 
                                                    <input type="submit" name="" style="display:none;">
 
                                                </form>
-                                              <a href="{{route('dashboard.export-users')}}"  class="form-control src-btn"><i class="fa fa-download" aria-hidden="true"></i></a>
+                                              <!-- <a href="{{route('dashboard.export-users')}}"  class="form-control src-btn"><i class="fa fa-download" aria-hidden="true"></i></a> -->
 
                                                <form>
 
@@ -127,7 +127,7 @@
 
                                                             <td>{{ $item->id ?? '' }}</td>
 
-                                                            <td>{{ $item->first_name ?? '' }}</td>
+                                                            <td>{{ $item->name ?? '' }}</td>
 
                                                             <td>{{ $item->email ?? '' }}</td>
 

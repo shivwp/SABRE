@@ -590,7 +590,7 @@
 
              <input type="text" class="form-control" id="exampleInputuname_1" name="hour" value="{{($setting['hour'])??''}}">
         </div>
-           <div class="col-md-12">
+           {{--<div class="col-md-12">
             <h4 class="mt-5">Social links</h4><hr>
 
         <div class="row">
@@ -660,7 +660,7 @@
 
 
 
-      </div>
+      </div>--}}
 
 
 

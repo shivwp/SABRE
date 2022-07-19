@@ -1,4 +1,9 @@
 /public/storage
 /vendor
+/certificate
+/expense
+/gallery images
+/images
+/profile-image
 .env
 

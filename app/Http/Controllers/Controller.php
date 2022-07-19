@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -11,7 +12,6 @@ use App\Models\OrderPayment;
 use App\Models\OrderedProducts;
 use App\Models\OrderProductNote;
 use App\Models\OrderProductMeta;
-use App\Models\OrderMeta;
 use App\Models\VendorEarnings;
 use App\Models\Mails;
 use App\Models\UserMeta;
@@ -27,18 +27,13 @@ use App\Models\ProductBid;
 use App\Models\Product;
 use App\Models\UserBids;
 use App\Models\User;
-use App\Models\Address;
-use App\Models\OrderShipping;
 use App\Models\OrderNote;
 use Carbon;
 
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
-    //  public function __construct()
-    // {
-    //     die('sdfs');
-    // }
+
     public static function updateUserMeta($id, $meta_key = "", $meta_value)
     {
         //
@@ -172,7 +167,7 @@ class Controller extends BaseController
             }
         }
     }
-    public function getVendorMeta($id, $name="", $status = false)
+    public function getVendorMeta($id, $name = "", $status = false)
     {
         if (empty($name)) {
             // 
@@ -180,8 +175,7 @@ class Controller extends BaseController
                 ->pluck('value', 'name')
                 ->toArray();
             return $vendor_data;
-        }
-        else {
+        } else {
             //
             if ($status) {
                 // 
@@ -190,8 +184,7 @@ class Controller extends BaseController
                     return $vendor_data->value;
                 else
                     return "";
-            }
-            else {
+            } else {
                 $vendor_data = VendorSetting::where('vendor_id', $id)->where('name', $name)->select('name', 'value')
                     ->pluck('value', 'name')
                     ->toArray();
@@ -199,7 +192,7 @@ class Controller extends BaseController
             }
         }
     }
-    public function getPageMeta($id, $key="")
+    public function getPageMeta($id, $key = "")
     {
         if (empty($key)) {
             // 
@@ -207,8 +200,7 @@ class Controller extends BaseController
                 ->pluck('value', 'key')
                 ->toArray();
             return $PageMeta;
-        }
-        else {
+        } else {
             //
             if ($status) {
                 // 
@@ -217,8 +209,7 @@ class Controller extends BaseController
                     return $PageMeta->value;
                 else
                     return "";
-            }
-            else {
+            } else {
                 $PageMeta = PageMeta::where('page_id', $id)->where('key', $key)->select('key', 'value')
                     ->pluck('value', 'key')
                     ->toArray();
@@ -228,323 +219,322 @@ class Controller extends BaseController
     }
     public function get_country($id)
     {
-        $country_name= Country::where($id,'=','id')->first();
+        $country_name = Country::where($id, '=', 'id')->first();
         return  $country_name->name;
     }
     public function get_state($id)
     {
-        $state_name= Country::where($id,'=','id')->first();
+        $state_name = Country::where($id, '=', 'id')->first();
     }
     public function get_city($id)
     {
-        $city_name= Country::where($id,'=','id')->first();
+        $city_name = Country::where($id, '=', 'id')->first();
     }
     public function chronfn()
     {
-        $productBid = Product::where('for_auction','on')->get();
-           if(count($productBid) > 0){
-                foreach($productBid as $val){
-                    $productAuto  = ProductBid::where([['product_id',$val->id],['auto_allot',1]])->first(); 
-                    if(!empty($productAuto)){
-                            $currentDate = Carbon\Carbon::now()->format('Y-m-d');
-                            $currenttime =  Carbon\Carbon::now()->format('H:i:m');
-                            //$currentDateTime->setTimezone('Asia/Kolkata');
-                            if(($currentDate == $productAuto->end_date) && ($productAuto->end_time >= $currenttime)){
-                                $userBid = UserBids::where('product_id',$val->id)->orderBy('bid_price', 'desc')->first();
-                                $user = User::where('id',$userBid->user_id)->first();
-                                if(empty($user->default_card)){
-                                    echo 'payment not found';
-                                    die;
-                                }
-                                //order create
-                                $order =  Order::create([
-                                    'parent_id'             => 0,
-                                    'user_id'               => $userBid->user_id,
-                                    'status'                => 'order incomplete',
-                                    'status_note'           =>  'new order',
-                                    'shipping_method'       =>   'stripe',
-                                    'payment_status'        => 'success',
-                                    'currency_code'        => '$'
-                                ]);
-                                $product = Product::where('id',$val->id)->first();
-                                //order product create
-                                $orderedProduct = OrderedProducts::create([
-                                    'order_id' =>$order->id,
-                                    'product_id' => $product->id,
-                                    'product_name' => $product->pname,
-                                    'category' => $product->cat_id,
-                                    'product_type' => $product->product_type,
-                                    'quantity' => 1,
-                                    'product_price' => $product->s_price,
-                                    'total_price' => $product->s_price,
-                                    'tax' => 0,
-                                    'status' => "order incomplete",
-                                    'vendor_id' => $product->vendor_id
-                                ]);
-                                $vendorearning = $product->s_price;
-                                $productmeta = [
-                                    'product_image' => $product->featured_image,
-                                ];
-                                //order product note
-                                OrderProductNote::create([
-                                    'order_id'      => $order->id,
-                                    'product_id'    => $product->id,
-                                    'status' => "order incomplete",
-                                    'note' => "delivery incomplete",
-                                ]);
-                                //order product meta
-                                foreach($productmeta as $metakey => $metaval){
-                                    OrderProductMeta::create([
-                                        'order_id' => $order->id,
-                                        'product_id' => $product->id,
-                                        'meta_key' => $metakey,
-                                        'meta_value' => $metaval
-                                    ]);
-                                }
-                                //Vendor Earning
-                                $vendorEarning =    VendorEarnings::create([
-                                    'order_id'              =>$order->id,
-                                    'vendor_id'             =>$product->vendor_id,
-                                    'product_id'            =>$product->id,
-                                    'amount'                =>$vendorearning,
-                                    'payment_status'        =>"pending"
-                                ]);
-                                //order payment
-                                $stripeAccount = new \Stripe\StripeClient(env('STRIPE_SECRET'));
-                                \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
-                                $paymentIntent = \Stripe\PaymentIntent::create([
-                                    'customer' => $user->customer_id,
-                                    'amount' => $userBid->bid_price * 100,
-                                    'currency' => 'usd',
+        $productBid = Product::where('for_auction', 'on')->get();
+        if (count($productBid) > 0) {
+            foreach ($productBid as $val) {
+                $productAuto  = ProductBid::where([['product_id', $val->id], ['auto_allot', 1]])->first();
+                if (!empty($productAuto)) {
+                    $currentDate = Carbon\Carbon::now()->format('Y-m-d');
+                    $currenttime =  Carbon\Carbon::now()->format('H:i:m');
+                    //$currentDateTime->setTimezone('Asia/Kolkata');
+                    if (($currentDate == $productAuto->end_date) && ($productAuto->end_time >= $currenttime)) {
+                        $userBid = UserBids::where('product_id', $val->id)->orderBy('bid_price', 'desc')->first();
+                        $user = User::where('id', $userBid->user_id)->first();
+                        if (empty($user->default_card)) {
+                            echo 'payment not found';
+                            die;
+                        }
+                        //order create
+                        $order =  Order::create([
+                            'parent_id'             => 0,
+                            'user_id'               => $userBid->user_id,
+                            'status'                => 'order incomplete',
+                            'status_note'           =>  'new order',
+                            'shipping_method'       =>   'stripe',
+                            'payment_status'        => 'success',
+                            'currency_code'        => '$'
+                        ]);
+                        $product = Product::where('id', $val->id)->first();
+                        //order product create
+                        $orderedProduct = OrderedProducts::create([
+                            'order_id' => $order->id,
+                            'product_id' => $product->id,
+                            'product_name' => $product->pname,
+                            'category' => $product->cat_id,
+                            'product_type' => $product->product_type,
+                            'quantity' => 1,
+                            'product_price' => $product->s_price,
+                            'total_price' => $product->s_price,
+                            'tax' => 0,
+                            'status' => "order incomplete",
+                            'vendor_id' => $product->vendor_id
+                        ]);
+                        $vendorearning = $product->s_price;
+                        $productmeta = [
+                            'product_image' => $product->featured_image,
+                        ];
+                        //order product note
+                        OrderProductNote::create([
+                            'order_id'      => $order->id,
+                            'product_id'    => $product->id,
+                            'status' => "order incomplete",
+                            'note' => "delivery incomplete",
+                        ]);
+                        //order product meta
+                        foreach ($productmeta as $metakey => $metaval) {
+                            OrderProductMeta::create([
+                                'order_id' => $order->id,
+                                'product_id' => $product->id,
+                                'meta_key' => $metakey,
+                                'meta_value' => $metaval
+                            ]);
+                        }
+                        //Vendor Earning
+                        $vendorEarning =    VendorEarnings::create([
+                            'order_id'              => $order->id,
+                            'vendor_id'             => $product->vendor_id,
+                            'product_id'            => $product->id,
+                            'amount'                => $vendorearning,
+                            'payment_status'        => "pending"
+                        ]);
+                        //order payment
+                        $stripeAccount = new \Stripe\StripeClient(env('STRIPE_SECRET'));
+                        \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+                        $paymentIntent = \Stripe\PaymentIntent::create([
+                            'customer' => $user->customer_id,
+                            'amount' => $userBid->bid_price * 100,
+                            'currency' => 'usd',
 
-                                    'payment_method_types' => ['card'],
+                            'payment_method_types' => ['card'],
 
-                                    'payment_method' => $user->default_card,
+                            'payment_method' => $user->default_card,
 
-                                    'transfer_group' => $order->id,
+                            'transfer_group' => $order->id,
 
-                                    'confirm'=>'true',
+                            'confirm' => 'true',
 
-                                    'shipping' => [
+                            'shipping' => [
 
-                                        'name' => 'shipping name',
+                                'name' => 'shipping name',
 
-                                        'phone' => '9090909090',
+                                'phone' => '9090909090',
 
-                                        'address' => [
+                                'address' => [
 
-                                            'city' => 'city',
+                                    'city' => 'city',
 
-                                            'country' => 'country',
+                                    'country' => 'country',
 
-                                            'line1' => 'line1',
+                                    'line1' => 'line1',
 
-                                            'line2' => 'line2',
+                                    'line2' => 'line2',
 
-                                            'postal_code' => 'postal_code',
+                                    'postal_code' => 'postal_code',
 
-                                            'state' => 'state',
+                                    'state' => 'state',
 
-                                        ]
+                                ]
 
 
 
-                                    ]
+                            ]
 
 
 
-                                ]);
+                        ]);
 
 
 
 
 
-                                    if($paymentIntent->status == 'succeeded'){
+                        if ($paymentIntent->status == 'succeeded') {
 
 
 
-                                         $updateAmount = $user->user_wallet + $userBid->bid_price;
+                            $updateAmount = $user->user_wallet + $userBid->bid_price;
 
 
 
-                                         $user->update(['user_wallet'=>$updateAmount]);
+                            $user->update(['user_wallet' => $updateAmount]);
 
 
 
 
 
-                                            UserWalletTransection::create([
+                            UserWalletTransection::create([
 
-                                                'user_id' => $user->id,
+                                'user_id' => $user->id,
 
-                                                'amount' =>  $product->s_price,
+                                'amount' =>  $product->s_price,
 
-                                                'amount_type' => 'CARD',
+                                'amount_type' => 'CARD',
 
-                                                'description' => 'Dabit / Cradit Card',
+                                'description' => 'Dabit / Cradit Card',
 
-                                                'title' => 'Received from',
+                                'title' => 'Received from',
 
-                                                'status' => 'received',
+                                'status' => 'received',
 
 
 
-                                            ]);
+                            ]);
+                        }
 
-                                    }
 
 
 
 
+                        OrderNote::create([
 
-                                    OrderNote::create([
+                            'order_id' => $order->id,
 
-                                        'order_id' => $order->id,
+                            'order_status' => 'order placed',
 
-                                        'order_status' => 'order placed',
+                            'order_note' => 'order incomplete',
 
-                                        'order_note' => 'order incomplete',
+                            'status' => 'new',
 
-                                        'status' => 'new',
+                        ]);
 
-                                    ]);
 
 
 
 
+                        OrderPayment::create([
 
-                                     OrderPayment::create([
+                            'order_id'  => $order->id,
 
-                                        'order_id'  =>$order->id,
+                            'status'    => 'succeeded',
 
-                                        'status'    =>'succeeded',
+                            'trans_id' => $paymentIntent->id,
 
-                                        'trans_id' =>$paymentIntent->id,
+                            'charges_id' => $paymentIntent->charges->data[0]->id,
 
-                                        'charges_id' =>$paymentIntent->charges->data[0]->id,
+                            'balance_transaction' => $paymentIntent->charges->data[0]->balance_transaction,
 
-                                        'balance_transaction' =>$paymentIntent->charges->data[0]->balance_transaction,
+                            'message' => $paymentIntent->status
 
-                                        'message' => $paymentIntent->status
 
 
+                        ]);
 
-                                    ]);
 
 
+                        $userBid->update([
+                            'status' => 'winner'
+                        ]);
 
-                                    $userBid->update([
-                                        'status' => 'winner'
-                                    ]);
+                        $userBid->save();
 
-                                    $userBid->save();
 
+                        //auction close
 
-                                    //auction close
+                        $proupdate = Product::where('id', $val->id)->update([
 
-                                    $proupdate = Product::where('id',$val->id)->update([
+                            'for_auction' => 'off'
 
-                                        'for_auction' => 'off'
+                        ]);
 
-                                    ]);
 
 
 
 
+                        //email
 
-                                //email
 
 
+                        $basicinfo = [
 
-                                $basicinfo = [
 
 
+                            '{orderid}' =>  $order->id,
 
-                                    '{orderid}' =>  $order->id,
 
 
+                        ];
 
-                                ];
 
 
+                        $mail_data = Mails::where('msg_category', 'order complete')->first();
 
-                                $mail_data = Mails::where('msg_category', 'order complete')->first();
 
 
+                        $msg = $mail_data->message;
 
-                                $msg = $mail_data->message;
 
 
+                        foreach ($basicinfo as $key => $info) {
 
-                                foreach($basicinfo as $key=> $info){
 
 
+                            $msg = str_replace($key, $info, $msg);
+                        }
 
-                                    $msg = str_replace($key,$info,$msg);
 
 
+                        $config = [
+                            'from_email' => $mail_data->mail_from,
 
-                                }
 
 
+                            "reply_email" => $mail_data->reply_email,
 
-                                    $config = ['from_email' => $mail_data->mail_from,
 
 
+                            'subject' => $mail_data->subject,
 
-                                        "reply_email" => $mail_data->reply_email,
 
 
+                            'name' => $mail_data->name,
 
-                                        'subject' => $mail_data->subject, 
 
 
+                            'message' => $msg,
 
-                                        'name' => $mail_data->name,
 
 
+                        ];
 
-                                        'message' => $msg,
 
 
-
-                                    ];
-
-
-
-                                    Mail::to('gunjanmanghnani5@gmail.com')->send(new OrderMail($config));
-
-
-
-                            }
-
+                        Mail::to('gunjanmanghnani5@gmail.com')->send(new OrderMail($config));
                     }
-
-
                 }
-
-           }
-
-
-           return 0;
+            }
+        }
 
 
-
-      }
-
-
+        return 0;
+    }
 
 
+    public function UserInfo($user)
+    {
+        # code...
+        return [
+            'name' => ($user->name) ?? $user->first_name . ' ' . $user->last_name,
+            'email' => ($user->email) ?? '',
+            'dob' => ($user->dob) ?? '',
+            'gender' => ($user->gender) ?? '',
+            'phone' => ($user->phone) ?? '',
+            'profile_image' => ($user->profile_image) ? url($user->profile_image) : url('profile-image/demo.png'),
+            // 'address' => ($user->address) ? $user->address.' '.' '. : '',
+            'profile_image' => $user->profile_image,
+            'profile_image' => $user->profile_image,
+        ];
+    }
 
-     
 
-
-
-     
-
-
-
+    public function uploadDocuments($document, $path = '', $user_id = 0)
+    {
+        # code...
+        $file = $document;
+        $extention = $file->getClientOriginalExtension();
+        $filename = time().$user_id.rand(100,999). '.' . $extention;
+        $file->move($path, $filename);
+        return $path.'/'.$filename;
+    }
 }
-
-
-

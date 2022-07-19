@@ -20,7 +20,7 @@ class DashboardController extends Controller
     public function index()
     {
 
-  
+    $d['users_one'] = User::where('id',Auth::user->id());
    $d['orders']=Order::count();
    $d['currdata'] = Order::select('*')
             ->whereMonth('created_at', Carbon::now()->month)

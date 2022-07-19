@@ -8,7 +8,7 @@ use App\Models\JobCategory;
 
 class JobCategoryController extends Controller
 {
-    public function index(){
+    public function index(Request $request){
         $d['title'] = "Job Category";
        
         // dd($d['model']);
@@ -40,6 +40,8 @@ class JobCategoryController extends Controller
         $job_cate = JobCategory::updateOrCreate(['id'=>$request->id],[
             'title'    => $request->title,
         ]);
+        $type='Job category';
+        \Helper::addToLog('Job category update', $type);
         return redirect()->route('dashboard.job-category.index');
     }
     public function edit($id)

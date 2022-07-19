@@ -18,6 +18,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
+        'name',
         'first_name',
         'last_name',
         'email',
@@ -33,6 +34,7 @@ class User extends Authenticatable
         'password',
         'address',
         'zip',
+        'is_otp_verified',
     ];
     /**
      * The attributes that should be hidden for arrays.
@@ -67,7 +69,11 @@ class User extends Authenticatable
 
     public function jobs()
     {
-        return $this->belongsToMany('App\Models\Jobs','');
+        return $this->belongsToMany('App\Models\Jobs');
+    }
+    public function tasklog()
+    {
+        return $this->belongsToMany('App\Models\TaskLog');
     }
 
     public function withdrow()

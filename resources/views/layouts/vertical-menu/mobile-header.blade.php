@@ -4,8 +4,8 @@
                         <div class="d-flex">
                             <a aria-label="Hide Sidebar" class="app-sidebar__toggle" data-toggle="sidebar" href="#"></a><!-- sidebar-toggle-->
                             <a class="header-brand" href="{{ url('/' . $page='index') }}">
-                                <img src="{{URL::asset('assets/images/brand/logo.png')}}" class="header-brand-img desktop-logo" alt="logo">
-                                <img src="{{URL::asset('assets/images/brand/logo-3.png')}}" class="header-brand-img desktop-logo mobile-light" alt="logo">
+                                <img src="{{URL::asset('/images/logo/1657177079.png')}}" class="header-brand-img desktop-logo" alt="logo">
+                                <img src="{{URL::asset('/images/logo/1657177079.png')}}" class="header-brand-img desktop-logo mobile-light" alt="logo">
                             </a>
                             <div class="d-flex order-lg-2 ml-auto header-right-icons">
                                 <button class="navbar-toggler navresponsive-toggler d-md-none" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-4"

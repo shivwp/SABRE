@@ -81,7 +81,7 @@
                                     <option>Select</option>
                                     @if(count($users) > 0)
                                         @foreach($users as $value)
-                                            <option value="{{$value->id}}"  {{isset($job_applied->user_id) && $job_applied->user_id == $value->id ? 'selected' : ''}}>{{$value->first_name}} {{$value->last_name}} ({{$value->email }})</option>
+                                            <option value="{{$value->id}}"  {{isset($job_applied->user_id) && $job_applied->user_id == $value->id ? 'selected' : ''}}>{{$value->name}} ({{$value->email }})</option>
                                         @endforeach
                                     @endif
                                 </select>
